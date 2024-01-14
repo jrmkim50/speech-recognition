@@ -20,7 +20,7 @@ from langchain_community.embeddings import OpenAIEmbeddings
 vectorstore = Chroma.from_documents(
     documents=all_splits,
     collection_name="rag-chroma",
-    embedding=OpenAIEmbeddings(api_key="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"),
+    embedding=OpenAIEmbeddings(),
 )
 
 retriever = vectorstore.as_retriever()
@@ -28,7 +28,7 @@ retriever = vectorstore.as_retriever()
 
 
 # RAG prompt
-template = """Answer the question tersely and directly based only on the following context:
+template = """Answer the question tersely and directly like a normal conversational human based only on the following context:
 {context}
 
 Question: {question}
@@ -73,8 +73,10 @@ def speechToText():
     output = output.strip()
     if output.lower().startswith("answer: "):
       output = output[8:]
+    if output.lower().startswith("based on the provided context, "):
+      output = output[len("based on the provided context, "):]
     return jsonify(
-      text=output
+      text=output.capitalize()
     )
   except Exception as e:
     print(e)
