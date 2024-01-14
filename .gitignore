@@ -1,3 +1,4 @@
 .env
 *.pyc
 documents.pdf
+voice-recorder-fe
